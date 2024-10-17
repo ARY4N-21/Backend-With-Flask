@@ -1,0 +1,39 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# SQLite database file
+expense_tracker.db
+
+# Environment files
+.env
+.venv/
+venv/
+*.env
+
+# macOS files
+.DS_Store
+
+# Python virtual environment
+bin/
+lib/
+include/
+Scripts/
+pyvenv.cfg
+
+# Log files
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# Node.js dependency folder (if any static files are managed by Node.js)
+node_modules/
+
+# Python dependency file
+*.egg-info/
+
