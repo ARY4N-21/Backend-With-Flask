@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
+CORS(app)
 
 # Function to connect to the SQLite database
 def get_db_connection():
@@ -34,14 +36,17 @@ def add_expense():
     name = expense_data.get('name')
     amount = expense_data.get('amount')
 
-    if not name or not amount:
+    if name is None or amount is None:
         return jsonify({'error': 'Invalid input'}), 400
 
     conn = get_db_connection()
-    conn.execute('INSERT INTO expenses (name, amount) VALUES (?, ?)', (name, amount))
+    cursor = conn.execute('INSERT INTO expenses (name, amount) VALUES (?, ?)', (name, amount))
     conn.commit()
+    new_expense_id = cursor.lastrowid  # Get the ID of the newly created expense
     conn.close()
-    return jsonify({'message': 'Expense added successfully'}), 201
+    
+    # Return the newly created expense as JSON
+    return jsonify({'id': new_expense_id, 'name': name, 'amount': amount}), 201
 
 # Route to delete an expense by ID (DELETE request)
 @app.route('/expenses/<int:id>', methods=['DELETE'])
@@ -72,7 +77,7 @@ def update_expense(id):
         conn.close()
         return jsonify({'error': 'Expense not found'}), 404
 
-    if not name or not amount:
+    if name is None or amount is None:
         conn.close()
         return jsonify({'error': 'Invalid input'}), 400
 
@@ -83,4 +88,4 @@ def update_expense(id):
 
 if __name__ == '__main__':
     init_db()  # Create the table if it doesn't exist
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
